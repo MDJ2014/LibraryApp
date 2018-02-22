@@ -6,11 +6,11 @@ block content
     a.button(href='new_book') Create New Book
   p
     | Filters 
-    a(href='books') All
+    a(href='/books') All
     |  | 
-    a(href='overdue_books') Overdue
+    a(href='/books/overdue_books') Overdue
     |  | 
-    a(href='checked_books') Checked Out
+    a(href='/books/checked_books') Checked Out
   table
     thead
       tr
@@ -22,7 +22,7 @@ block content
       each book in overdue
         tr
           td
-            a(href= `book_details/${book.Book.id}`) #{book.Book.title}
+            a(href= `/books/${book.Book.id}`) #{book.Book.title}
           td #{book.Book.author}
           td #{book.Book.genre}
           td #{book.Book.first_published}

@@ -16,35 +16,14 @@ router.get('/', function(req, res, next) {
     order: [
     ['title', 'ASC']
   ]  } 
-  ).then(function(results) {
+  ).then(function(books) {
     res.render('books', {
-      books: results
+      books
      });
   });
   });
   
-  /**************************************************************** DETAIL*/
-  
-  router.get('/:id', function(req, res, next) {
-   
-    let errors = [req.query.errors];
-    const foundBook = Book.findById(req.params.id);
-    const foundLoan = Loan.findAll({
-      where: [{
-        book_id : req.params.id
-      }],
-      include: [
-        {model: Patron},
-        {model: Book}
-      ]
-    });
-  
-    Promise.all([foundBook, foundLoan])
-      .then(function(values) {
-       res.render('book_details', {book: values[0], loans: values[1], errors: errors});
-      
-    });
-  });
+
   
   
   /***********************************************************CHECKED */
@@ -66,9 +45,9 @@ router.get('/', function(req, res, next) {
           }
        }],
         
-     }) .then(function(results){
+     }) .then(function(checked){
           res.render('books_checked',{
-          checked: results
+          checked
       });
     }).catch(function(error) {
          res.send(500, error);
@@ -124,7 +103,28 @@ router.post('/new_book', function(req, res, next) {
   });
 
 
-
+  /**************************************************************** DETAIL*/
+  
+  router.get('/:id', function(req, res, next) {
+   
+    let errors = [req.query.errors];
+    const foundBook = Book.findById(req.params.id);
+    const foundLoan = Loan.findAll({
+      where: [{
+        book_id : req.params.id
+      }],
+      include: [
+        {model: Patron},
+        {model: Book}
+      ]
+    });
+  
+    Promise.all([foundBook, foundLoan])
+      .then(function(values) {
+       res.render('book_details', {book: values[0], loans: values[1], errors: errors});
+      
+    });
+  });
 
 
 

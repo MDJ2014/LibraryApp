@@ -21,27 +21,7 @@ router.get('/', function(req, res, next) {
        });
     });
     });
-  /***********************************************************DETAIL */
   
-  router.get('/:id', function(req, res, next) {
-    let errors = [req.query.errors];
-    const foundPatron = Patron.findById(req.params.id);
-    const foundLoan = Loan.findAll({
-      where: [{
-        book_id : req.params.id
-      }],
-      include: [
-        {model: Patron},
-        {model: Book}
-      ]
-    });
-  
-    Promise.all([foundPatron, foundLoan])
-      .then(function(values) {
-       res.render('patron_details', {patron: values[0], loans: values[1], errors: errors});
-      
-    });
-  });
   
   
   
@@ -65,7 +45,27 @@ router.get('/', function(req, res, next) {
   });
 
 
+/***********************************************************DETAIL */
+  
+router.get('/:id', function(req, res, next) {
+  let errors = [req.query.errors];
+  const foundPatron = Patron.findById(req.params.id);
+  const foundLoan = Loan.findAll({
+    where: [{
+      book_id : req.params.id
+    }],
+    include: [
+      {model: Patron},
+      {model: Book}
+    ]
+  });
 
+  Promise.all([foundPatron, foundLoan])
+    .then(function(values) {
+     res.render('patron_details', {patron: values[0], loans: values[1], errors: errors});
+    
+  });
+});
 
 
 

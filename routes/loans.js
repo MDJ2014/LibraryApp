@@ -85,14 +85,10 @@ router.get('/', function(req, res, next) {
   
   
   /********************************************************************** NEW*/
-  // router.get('/new_loan', function(req, res, next) {
   
-  //   res.render('loan_new');
-  // });
-  
-  
+ 
   router.get('/new_loan', function(req, res, next) {
-  
+  //res.render('loan_new');
     const allbooks =Book.findAll({
       order: [
         ['title', 'ASC']
@@ -104,11 +100,11 @@ router.get('/', function(req, res, next) {
       ]
     });
   
-  Promise.all([allbooks, allpatrons])
-      .then(function(values) {
-       res.render('loan_new', {allbooks: values[0], allpatrons: values[1], errors: errors});
+   Promise.all([allbooks, allpatrons])
+       .then(function(values) {console.log(values);
+        res.render('loan_new', {allbooks: values[0], allpatrons: values[1], errors: errors});
       
-    });
+     });
   
   });
   
