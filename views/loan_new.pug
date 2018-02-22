@@ -1,0 +1,26 @@
+extends layout.pug
+
+block content
+  h1 New Loan
+  form
+    p
+      label(for='book_id') Book
+      select#book_id
+        each book in allbooks
+          option(value=`${book.id}`) #{book.id}
+    
+    p
+      label(for='patron_id') Patron
+      select#patron_id
+        each patron in allpatrons
+          option(value=`${book.id}`) Andrew Chalkley
+       
+        
+    p
+      label(for='loaned_on') Loaned on:
+      input#loaned_on(type='text' value='Sun May 22 2016 17:00:00 GMT-0700 (PDT)')
+    p
+      label(for='return_by') Return by:
+      input#return_by(type='text' value='Sun May 29 2016 17:00:00 GMT-0700 (PDT)')
+    p
+      input(type='submit' value='Create New Loan')
