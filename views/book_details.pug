@@ -4,7 +4,7 @@ block content
 
 
     h1 #{book.title}
-    form
+    form(method='post' action=`/books/${book.id}`)
         p
             label(for='title') Title
             input#title(type='text' value=`${book.title}`)
@@ -23,21 +23,21 @@ block content
     table
         thead
             tr
-            th book
+            th Book
             th Patron 
             th Loaned on
             th Return by 
             th Returned on
             th Action
         tbody
-          
+          each loan in loans
               tr
               td
-                a(href='book') 
+                a(href= `/books/${loan.Book.id}`) #{book.title}
               td
-                a(href='patron_detail') 
-              td 
-              td 
-              td 
+                a(href=`/patrons/${loan.Patron.id}`) #{loan.Patron.first_name} #{loan.Patron.last_name}
+              td #{loan.loaned_on}
+              td #{loan.return_by}
+              td #{loan.returned_on}
               td
                 a.button(href='return_book') Return book

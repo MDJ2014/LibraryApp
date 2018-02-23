@@ -3,7 +3,7 @@ extends layout.pug
 block content
 
     h1 #{patron.first_name} #{patron.last_name}
-    form(method='post')
+    form(method='post' action=`/patrons/${patron.id}`)
         p
             label(for='first_name') First Name
             input#first_name(type='text' value=`${patron.first_name}`)
@@ -35,13 +35,14 @@ block content
             th Returned on
             th Action
         tbody
+          each loan in loans
             tr
                 td
-                    a(href='book_detail') Harry Potter and the Goblet of Fire
+                    a(href= `/books/${loan.Book.id}`) #{loan.Book.title}
                 td
-                    a(href='patron_detail') Andrew Chalkley
-                td 2015-12-11
-                td 2015-12-18
-                td
+                    a(href=`/patrons/${loan.Patron.id}`) #{loan.Patron.first_name} #{loan.Patron.last_name}
+                td #{loan.loaned_on}
+                td #{loan.return_by}
+                td #{loan.returned_on}
                 td
                     a.button(href='return_book') Return Book

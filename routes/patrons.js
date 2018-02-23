@@ -52,7 +52,7 @@ router.get('/:id', function(req, res, next) {
   const foundPatron = Patron.findById(req.params.id);
   const foundLoan = Loan.findAll({
     where: [{
-      book_id : req.params.id
+      patron_id : req.params.id
     }],
     include: [
       {model: Patron},
@@ -66,6 +66,17 @@ router.get('/:id', function(req, res, next) {
     
   });
 });
+
+
+/*******************************************************************************UPDATE */
+
+
+
+
+
+
+
+
 
 
 

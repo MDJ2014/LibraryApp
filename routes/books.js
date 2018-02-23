@@ -126,9 +126,16 @@ router.post('/new_book', function(req, res, next) {
     });
   });
 
+/**********************************************************************************UPDATE */
 
+router.post("/books/:id", function(req, res, next) {
+Book.findById(req.params.id).then(function(book){
 
-
+  return book.update(req.body);
+}).then(function(book){
+res.redirect("/books");
+});
+ });
 
 
 

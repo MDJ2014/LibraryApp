@@ -89,20 +89,21 @@ router.get('/', function(req, res, next) {
  
   router.get('/new_loan', function(req, res, next) {
   //res.render('loan_new');
-    const allbooks =Book.findAll({
+    const allBooks =Book.findAll({
       order: [
         ['title', 'ASC']
       ]
     });
-    const allpatrons =Patron.findAll({
+    const allPatrons =Patron.findAll({
       order: [
+        ['first_name', 'ASC'],
         ['last_name', 'ASC']
       ]
     });
   
-   Promise.all([allbooks, allpatrons])
-       .then(function(values) {console.log(values);
-        res.render('loan_new', {allbooks: values[0], allpatrons: values[1], errors: errors});
+   Promise.all([allBooks, allPatrons])
+       .then(function(values) {
+        res.render('loan_new', {abooks: values[0], apatrons: values[1], errors: errors});
       
      });
   
