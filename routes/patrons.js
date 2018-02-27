@@ -70,10 +70,20 @@ router.get('/:id', function(req, res, next) {
 
 /*******************************************************************************UPDATE */
 
+router.post("/:id", function(req, res, next) {
+
+  Patron.findById(req.params.id).then(function(patron){
+     return patron.update(req.body,{
+ where: {id: req.params.id}
+});
+
+ }).then(function(patron){
+ res.redirect("/patrons");
+             //       res.send(patron);
+ });
 
 
-
-
+ });
 
 
 

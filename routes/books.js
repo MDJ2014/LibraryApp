@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+const moment = require('moment');
 var Patron = require('../models').Patron;
 var Book = require('../models').Book;
 var Loan = require('../models').Loan;
@@ -8,7 +8,7 @@ var Loan = require('../models').Loan;
 var Sequelize = require('sequelize');
 const Op = Sequelize.Op
 
-
+let todaysDate = moment().format("YYYY-MM-DD");
 
 /******************************************************************ALL */
 router.get('/', function(req, res, next) {
@@ -128,18 +128,53 @@ router.post('/new_book', function(req, res, next) {
 
 /**********************************************************************************UPDATE */
 
-router.post("/books/:id", function(req, res, next) {
-Book.findById(req.params.id).then(function(book){
+router.post("/:id", function(req, res, next) {
 
-  return book.update(req.body);
-}).then(function(book){
-res.redirect("/books");
+   Book.findById(req.params.id).then(function(book){
+  
+  
+    return book.update(req.body,{
+title: req.body.title, genre: req.body.genre, author: req.body.author, first_published: req.body.first_published
+},{
+  where: {id: req.params.id}
 });
- });
+// return book.update(req.body,{
+
+//   where:{
+//     id: req.params.id
+//   }
+// });
+  }).then(function(book){
+  res.redirect("/books");
+                  //    res.send(book);
+  });
+
+
+  });
+
+  /********************************************************************************RETURN BOOK LOAN */
+
+  router.get('/:id/return', function(req, res, next) {
+
+    Loan.findAll({
+      where: [{
+        book_id : req.params.id
+      }],
+      include: [
+        {model: Patron},
+        {model: Book}
+      ]
+    }).then(function(loans) {
+      res.render('book_return', {loan: loans[0], patron: loans[1], book: loans[2], todaysDate});
+     // res.render('book_return', {loans});
+     // res.send(loans);
+    });
+  })
 
 
 
-
+  
+   
 
 
  module.exports = router;

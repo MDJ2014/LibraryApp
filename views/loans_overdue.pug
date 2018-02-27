@@ -24,9 +24,9 @@ block content
       each book in overdue
         tr
           td
-            a(href= `book_details/${book.Book.id}`) #{book.Book.title}
+            a(href= `/books/${book.Book.id}`) #{book.Book.title}
           td
-            a(href=`patron_details/${book.patron_id}`) #{book.Patron.first_name} #{book.Patron.last_name}
+            a(href=`/patrons/${book.patron_id}`) #{book.Patron.first_name} #{book.Patron.last_name}
           td #{book.loaned_on}
           td #{book.return_by}
           td #{book.returned_on}

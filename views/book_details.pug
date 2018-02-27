@@ -4,7 +4,7 @@ block content
 
 
     h1 #{book.title}
-    form(method='post' action=`/books/${book.id}`)
+    form(action="?_method=PUT" method="post")
         p
             label(for='title') Title
             input#title(type='text' value=`${book.title}`)
@@ -40,4 +40,4 @@ block content
               td #{loan.return_by}
               td #{loan.returned_on}
               td
-                a.button(href='return_book') Return book
+                 a.button(href=`/books/${loan.Book.id}/return`) Return Book
