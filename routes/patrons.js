@@ -47,7 +47,7 @@ router.get('/', function(req, res, next) {
 
 /***********************************************************DETAIL */
   
-router.get('/:id', function(req, res, next) {
+router.get('/edit/:id', function(req, res, next) {
   let errors = [req.query.errors];
   const foundPatron = Patron.findById(req.params.id);
   const foundLoan = Loan.findAll({
@@ -70,13 +70,17 @@ router.get('/:id', function(req, res, next) {
 
 /*******************************************************************************UPDATE */
 
-router.post("/:id", function(req, res, next) {
+router.post("/edit/:id", function(req, res, next) {
 
   Patron.findById(req.params.id).then(function(patron){
-     return patron.update(req.body,{
- where: {id: req.params.id}
-});
-
+    
+if(patron) {
+  return patron.update(req.body,{
+    where: {id: req.params.id}
+  });
+} else {
+  res.send(404)
+}
  }).then(function(patron){
  res.redirect("/patrons");
              //       res.send(patron);
@@ -86,8 +90,7 @@ router.post("/:id", function(req, res, next) {
  });
 
 
-
-
+ 
 
 
 

@@ -3,7 +3,7 @@ extends layout.pug
 block content
 
     h1 #{patron.first_name} #{patron.last_name}
-    form(method='post' action=`/patrons/${patron.id}`)
+    form(method='post' action=`/patrons/edit/${patron.id}`)
         p
             label(for='first_name') First Name
             input#first_name(type='text' value=`${patron.first_name}`)
