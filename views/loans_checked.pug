@@ -24,11 +24,11 @@ block content
       each loan in loans
         tr
           td
-            a(href= `/books/${loan.Book.id}`) #{loan.Book.title}
+            a(href= `/books/edit/${loan.Book.id}`) #{loan.Book.title}
           td
-            a(href=`/patrons/${loan.patron_id}`) #{loan.Patron.first_name} #{loan.Patron.last_name}
+            a(href=`/patrons/edit/${loan.patron_id}`) #{loan.Patron.first_name} #{loan.Patron.last_name}
           td #{date_loaned}
           td #{date_return_by}
           td #{loan.returned_on}
           td
-            a.button(href='return_book') Return Book
+            a.button(href=`/books/return/${loan.Book.id}`) Return Book

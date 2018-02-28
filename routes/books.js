@@ -9,6 +9,10 @@ var Sequelize = require('sequelize');
 const Op = Sequelize.Op
 
 let todaysDate = moment().format("YYYY-MM-DD");
+let returnDate = moment(todaysDate).add(7, 'days').format("YYYY-MM-DD");
+
+
+
 
 /******************************************************************ALL */
 router.get('/', function(req, res, next) {
@@ -103,9 +107,9 @@ router.post('/new_book', function(req, res, next) {
   });
 
 
-  /**************************************************************** DETAIL*/
+  /***************************************************************************************** DETAIL*/
   
-  router.get('/:id', function(req, res, next) {
+  router.get('/edit/:id', function(req, res, next) {
    
     let errors = [req.query.errors];
     const foundBook = Book.findById(req.params.id);
@@ -126,35 +130,23 @@ router.post('/new_book', function(req, res, next) {
     });
   });
 
-/**********************************************************************************UPDATE */
+/*******************************************************************************************UPDATE */
 
-router.post("/:id", function(req, res, next) {
+router.post('/edit/:id', function(req, res, next) {
 
-   Book.findById(req.params.id).then(function(book){
-  
-  
-    return book.update(req.body,{
-title: req.body.title, genre: req.body.genre, author: req.body.author, first_published: req.body.first_published
-},{
-  where: {id: req.params.id}
-});
-// return book.update(req.body,{
-
-//   where:{
-//     id: req.params.id
-//   }
-// });
-  }).then(function(book){
-  res.redirect("/books");
-                  //    res.send(book);
+  Book.update(req.body, {
+    where: [{ 
+      id: req.params.id }]})
+    .then(function() {
+      return res.redirect("/books");})
+    .catch(errors => {
+     // const errorMessages = errors.errors.map(err => err.message)
+      //return res.redirect(`/patrons/${req.params.id}?errors=${errorMessages}`);
   });
-
-
-  });
-
+})
   /********************************************************************************RETURN BOOK LOAN */
 
-  router.get('/:id/return', function(req, res, next) {
+  router.get('/return/:id', function(req, res, next) {
 
     Loan.findAll({
       where: [{
@@ -165,13 +157,24 @@ title: req.body.title, genre: req.body.genre, author: req.body.author, first_pub
         {model: Book}
       ]
     }).then(function(loans) {
-      res.render('book_return', {loan: loans[0], patron: loans[1], book: loans[2], todaysDate});
-     // res.render('book_return', {loans});
-     // res.send(loans);
+  
+      res.render('book_return', {loan: loans[0], patron: loans[1], book: loans[2], todaysDate, returnDate, loanedOnDate: moment(loans[0].loaned_on).format("YYYY-MM-DD")});
+   
     });
   })
 
+  router.post('/return/:id', function(req, res, next) {
 
+    Loan.update(req.body, {
+      where: [{ 
+        book_id: req.params.id }]})
+      .then(function() {
+        return res.redirect("/loans");})
+      .catch(errors => {
+       // const errorMessages = errors.errors.map(err => err.message)
+        //return res.redirect(`/patrons/${req.params.id}?errors=${errorMessages}`);
+    });
+  })
 
   
    

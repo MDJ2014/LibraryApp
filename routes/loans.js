@@ -16,9 +16,7 @@ let returnDate = moment(todaysDate).add(7, 'days').format("YYYY-MM-DD");
 
 router.get('/', function(req, res, next) {
     Loan.findAll({
-      // attributes:[
-      //   [Sequelize.fn('strftime', Sequelize.col('loaned_on'), '%Y-%d-%m'), 'loaned_on']
-      // ],
+    
     order: [
     ['loaned_on', 'ASC']
     ],
@@ -31,8 +29,8 @@ router.get('/', function(req, res, next) {
 
    res.render('loans', {
 
-    loans:results
- //, loanedAt: [Sequelize.fn('strftime', Sequelize.col('loaned_on'), '%Y-%d-%m'), 'loaned_on']
+    loans:results, loanedOnDate: moment(results[0].loaned_on).format("YYYY-MM-DD")
+
     });
   });
   });

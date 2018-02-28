@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+const moment = require('moment');
 var Patron = require('../models').Patron;
 var Book = require('../models').Book;
 var Loan = require('../models').Loan;
@@ -8,6 +8,8 @@ var Loan = require('../models').Loan;
 var Sequelize = require('sequelize');
 const Op = Sequelize.Op
 
+let todaysDate = moment().format("YYYY-MM-DD");
+let returnDate = moment(todaysDate).add(7, 'days').format("YYYY-MM-DD");
 
 /************************************************************** ALL*/
 router.get('/', function(req, res, next) {
@@ -62,7 +64,8 @@ router.get('/edit/:id', function(req, res, next) {
 
   Promise.all([foundPatron, foundLoan])
     .then(function(values) {
-     res.render('patron_details', {patron: values[0], loans: values[1], errors: errors});
+     res.render('patron_details', {patron: values[0], loans: values[1], 
+      dateLoaned: moment(values[1].loaned_on).format("YYYY-MM-DD"), returnDate, errors: errors});
     
   });
 });
@@ -70,26 +73,19 @@ router.get('/edit/:id', function(req, res, next) {
 
 /*******************************************************************************UPDATE */
 
-router.post("/edit/:id", function(req, res, next) {
 
-  Patron.findById(req.params.id).then(function(patron){
-    
-if(patron) {
-  return patron.update(req.body,{
-    where: {id: req.params.id}
+router.post('/edit/:id', function(req, res, next) {
+
+  Patron.update(req.body, {
+    where: [{ 
+      id: req.params.id }]})
+    .then(function() {
+      return res.redirect("/patrons");})
+    .catch(errors => {
+     // const errorMessages = errors.errors.map(err => err.message)
+      //return res.redirect(`/patrons/${req.params.id}?errors=${errorMessages}`);
   });
-} else {
-  res.send(404)
-}
- }).then(function(patron){
- res.redirect("/patrons");
-             //       res.send(patron);
- });
-
-
- });
-
-
+})
  
 
 
