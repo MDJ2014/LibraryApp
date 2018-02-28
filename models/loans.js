@@ -29,9 +29,9 @@ module.exports = (sequelize, DataTypes) => {
    // id: DataTypes.INTEGER,
     book_id: DataTypes.INTEGER,
     patron_id: DataTypes.INTEGER,
-    loaned_on: DataTypes.DATE,
-    return_by: DataTypes.DATE,
-    returned_on: DataTypes.DATE
+    loaned_on: DataTypes.DATEONLY,
+    return_by: DataTypes.DATEONLY,
+    returned_on: DataTypes.DATEONLY
   }, {
 
     tableName: 'loans', 

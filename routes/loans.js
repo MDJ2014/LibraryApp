@@ -29,13 +29,13 @@ router.get('/', function(req, res, next) {
 
    res.render('loans', {
 
-    loans:results, loanedOnDate: moment(results[0].loaned_on).format("YYYY-MM-DD")
-
+    loans:results
     });
   });
   });
+//, loanedOnDate: moment(results[0].loaned_on).format("YYYY-MM-DD")
 
-  /*****************************************************************OVERDUE */
+  /*************************************************************************************************OVERDUE */
   router.get('/overdue_loans', function(req, res, next) {
     Loan.findAll({
    
@@ -62,7 +62,7 @@ router.get('/', function(req, res, next) {
     });
   
   
-  /******************************************************************CHECKED */
+  /*****************************************************************************************************CHECKED */
   
   router.get('/checked_loans', function(req, res, next) {
   
@@ -92,7 +92,7 @@ router.get('/', function(req, res, next) {
     });
   
   
-  /********************************************************************** NEW LOAN FORM*/
+  /********************************************************************************************************* NEW LOAN FORM*/
   
  
   router.get('/new_loan', function(req, res, next) {
@@ -125,14 +125,14 @@ router.get('/', function(req, res, next) {
     Loan.create(req.body).then(function(loan){
         res.redirect('/loans');
     }).catch(function(error) {
-      res.render("loan_new", {errors: error.errors, todaysDate, returnDate, todaysDate: req.body.loaned_on, returnDate: req.body.return_by,});
+      res.render("loan_new", {errors: error.errors, todaysDate, returnDate: req.body.return_by,});
   });
    
   });
 
   
 
-
+  //loans: results, date_loaned: moment(results.loaned_on).format("YYYY-MM-DD"), date_return_by:moment().format("YYYY-MM-DD")
 
 module.exports = router;
 
