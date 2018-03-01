@@ -3,6 +3,10 @@ extends layout.pug
 block content
 
     h1 #{patron.first_name} #{patron.last_name}
+    if errors
+      ul
+        each error in errors
+          li= error
     form(method='post' action=`/patrons/edit/${patron.id}`)
         p
             label(for='first_name') First Name

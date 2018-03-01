@@ -6,13 +6,13 @@ block content
     p
       label(for='book_id') Book
       select#book_id(name='book_id')
-        each book in abooks
-          option(value=`${book.id}`) #{book.title}
+        each book in books
+          option(value=`${book.Book.id}`) #{book.Book.title}
     
     p
       label(for='patron_id') Patron
       select#patron_id(name='patron_id')
-        each patron in apatrons
+        each patron in patrons
           option(value=patron.id) #{patron.first_name} #{patron.last_name}
         
     p

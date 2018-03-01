@@ -1,9 +1,12 @@
 extends layout.pug
 
 block content
-
-
+    
     h1 #{book.title}
+    if errors
+      ul
+        each error in errors
+          li= error
     form(method='post' action=`/books/edit/${book.id}`)
         p
             label(for='title') Title
@@ -40,4 +43,5 @@ block content
               td #{loan.return_by}
               td #{loan.returned_on}
               td
-                 a.button(href=`/books/return/${loan.Book.id}`) Return Book
+                if(!loan.returned_on)
+                  a.button(href=`/books/return/${loan.Book.id}`) Return Book

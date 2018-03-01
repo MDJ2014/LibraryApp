@@ -3,7 +3,7 @@ extends layout.pug
 block content
   h1 Overdue Loans
   p
-    a.button(href='/loans/new_loan') Create New Loan
+    a.button(href='/loans/new') Create New Loan
   p
     | Filters 
     a(href='/loans') All
@@ -31,4 +31,4 @@ block content
           td #{book.return_by}
           td #{book.returned_on}
           td
-            a.button(href=`/books/return/${loan.Book.id}`) Return Book
+            a.button(href=`/books/return/${book.Book.id}`) Return Book

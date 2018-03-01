@@ -8,9 +8,9 @@ block content
   p
     strong Loaned By: #{loan.Patron.first_name} #{loan.Patron.last_name}
   p
-    strong Loaned On:  #{loanedOnDate}
+    strong Loaned On:  #{loan.loaned_on}
   p
-    strong Return By: #{returnDate}
+    strong Return By: #{loan.return_by}
   form(method='post' action=`/books/return/${loan.book_id}`)
     p
       label(for='returned_on') Returned on:

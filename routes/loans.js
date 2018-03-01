@@ -14,125 +14,127 @@ let returnDate = moment(todaysDate).add(7, 'days').format("YYYY-MM-DD");
 
 
 
-router.get('/', function(req, res, next) {
-    Loan.findAll({
-    
+router.get('/', function (req, res, next) {
+  Loan.findAll({
+
     order: [
-    ['loaned_on', 'ASC']
+      ['loaned_on', 'ASC']
     ],
     include: [
-        {model: Book},
-        {model: Patron}
-      ]
-      } 
-  ).then(function(results) {
+      { model: Book },
+      { model: Patron }
+    ]
+  }
+  ).then(function (results) {
 
-   res.render('loans', {
+    res.render('loans', {
 
-    loans:results
+      loans: results
     });
   });
-  });
-//, loanedOnDate: moment(results[0].loaned_on).format("YYYY-MM-DD")
+});
 
-  /*************************************************************************************************OVERDUE */
-  router.get('/overdue_loans', function(req, res, next) {
-    Loan.findAll({
-   
-   where:{
-         return_by:{
-             //[Op.lt]: new Date()
-             $lt: moment().format('YYYY-MM-DD').toString()
-           },
-           returned_on:{
-                  [Op.eq]:  null
-           }
+
+/*************************************************************************************************OVERDUE */
+router.get('/overdue_loans', function (req, res, next) {
+  Loan.findAll({
+
+    where: {
+      return_by: {
+       [Op.lt]: new Date()
+        
       },
-          include: [
-              {model: Book},
-               {model: Patron}
-            ]
-   }).then(function(results){
-           res.render('loans_overdue',{
-           overdue: results
-       });
-     }).catch(function(error) {
-          res.send(500, error);
-         }); 
+      returned_on: {
+        [Op.eq]: null
+      }
+    },
+    include: [
+      { model: Book },
+      { model: Patron }
+    ]
+  }).then(function (results) {
+    res.render('loans_overdue', {
+      overdue: results
     });
-  
-  
-  /*****************************************************************************************************CHECKED */
-  
-  router.get('/checked_loans', function(req, res, next) {
-  
-    Loan.findAll({
-    
-      where:{
-           loaned_on:{
-               [Op.ne]: null,
-              },
-             returned_on:{
-                    [Op.eq]:  null
-             }
-         },
-      
-      include: [
-        {model: Book},
-        {model: Patron}
-      ]
-     }).then(function(results){
-      
-      res.render('loans_checked',{
-          loans: results, date_loaned: moment(results.loaned_on).format("YYYY-MM-DD"), date_return_by:moment().format("YYYY-MM-DD")
-      });
-    }).catch(function(error) {
-         res.send(500, error);
-        }); 
-    });
-  
-  
-  /********************************************************************************************************* NEW LOAN FORM*/
-  
- 
-  router.get('/new_loan', function(req, res, next) {
-
-    const allBooks =Book.findAll({
-      order: [
-        ['title', 'ASC']
-      ]
-    });
-    const allPatrons =Patron.findAll({
-      order: [
-        ['first_name', 'ASC'],
-        ['last_name', 'ASC']
-      ]
-    });
-  
-   Promise.all([allBooks, allPatrons])
-       .then(function(values) {
-        res.render('loan_new', {abooks: values[0], apatrons: values[1], todaysDate, returnDate});
-      
-     });
-  
+  }).catch(function (error) {
+    res.send(500, error);
   });
-  
-  /********************************************************************************POST NEW LOAN */
-  
+});
 
-  router.post('/new_loan', function(req, res, next) {
-   
-    Loan.create(req.body).then(function(loan){
-        res.redirect('/loans');
-    }).catch(function(error) {
-      res.render("loan_new", {errors: error.errors, todaysDate, returnDate: req.body.return_by,});
+
+/*****************************************************************************************************CHECKED */
+
+router.get('/checked_loans', function (req, res, next) {
+
+  Loan.findAll({
+
+    where: {
+      loaned_on: {
+        [Op.ne]: null,
+      },
+      returned_on: {
+        [Op.eq]: null
+      }
+    },
+
+    include: [
+      { model: Book },
+      { model: Patron }
+    ]
+  }).then(function (results) {
+
+    res.render('loans_checked', {
+      loans: results
+    });
+  }).catch(function (error) {
+    res.send(500, error);
   });
-   
+});
+
+
+/********************************************************************************************************* NEW LOAN FORM*/
+                       
+router.get('/new', function(req, res, next) {
+  
+  const allBooks = Book.findAll({
+    order: [
+      ['title', 'ASC']
+    ]
   });
 
-  
+  const allPatrons = Patron.findAll({
+    order: [
+      ['first_name', 'ASC'],
+      ['last_name', 'ASC']
+    ]
+  });
 
-  //loans: results, date_loaned: moment(results.loaned_on).format("YYYY-MM-DD"), date_return_by:moment().format("YYYY-MM-DD")
+  Promise.all([allBooks, allPatrons]).then(function(values) {
+    res.render('new_loan', {books: values[0], patrons: values[1], todaysDate, returnDate});
+  }).catch(function(error) {
+      res.send(500, error);
+    })
+ })
+
+
+
+
+/**********************************************************************************************************POST NEW LOAN */
+
+
+router.post('/new', function (req, res, next) {
+
+  Loan.create(req.body).then(function (loan) {
+    res.redirect('/loans');
+  }).catch(function (error) {
+    res.render("loan_new", { errors: error.errors, todaysDate, returnDate: req.body.return_by, });
+  });
+
+});
+
+
+
+
 
 module.exports = router;
 

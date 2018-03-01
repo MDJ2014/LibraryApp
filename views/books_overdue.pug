@@ -22,7 +22,7 @@ block content
       each book in overdue
         tr
           td
-            a(href= `/books/${book.Book.id}`) #{book.Book.title}
+            a(href= `/books/edit/${book.Book.id}`) #{book.Book.title}
           td #{book.Book.author}
           td #{book.Book.genre}
           td #{book.Book.first_published}

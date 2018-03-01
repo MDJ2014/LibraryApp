@@ -3,7 +3,7 @@ extends layout.pug
 block content
   h1 Checked Out Books
   p
-    a.button(href='/loans/new_loan') Create New Loan
+    a.button(href='/loans/new') Create New Loan
   p
     | Filters 
     a(href='/loans') All
@@ -27,8 +27,8 @@ block content
             a(href= `/books/edit/${loan.Book.id}`) #{loan.Book.title}
           td
             a(href=`/patrons/edit/${loan.patron_id}`) #{loan.Patron.first_name} #{loan.Patron.last_name}
-          td #{date_loaned}
-          td #{date_return_by}
+          td #{loan.loaned_on}
+          td #{loan.return_by}
           td #{loan.returned_on}
           td
             a.button(href=`/books/return/${loan.Book.id}`) Return Book
