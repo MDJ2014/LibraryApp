@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     address: {
       type:DataTypes.STRING,
-      validate: {notEmpty:{
+      validate: {
+        notEmpty:{
         msg: 'Address is required'
       }
     }

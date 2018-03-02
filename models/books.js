@@ -1,27 +1,44 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  var Book = sequelize.define('Book', {
+  var Book = sequelize.define(
+    "Book",
+    {
+      title: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            msg: "Book title is required"
+          }
+        }
+      },
+      author: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            msg: "Book author is required"
+          }
+        }
+      },
+      genre: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            msg: "Book genre is required"
+          }
+        }
+      },
 
-    title:{ type: DataTypes.STRING,
-              validate:{
-                notEmpty:{
-                  msg:"Book title is required"
-                }
-              }
-            },
-    author: DataTypes.STRING,
-    genre: DataTypes.STRING,
-    first_published: DataTypes.INTEGER
-  }, {
-    
-    tableName: 'books', 
-    timestamps: false,
-    
-  }); 
+      first_published: DataTypes.INTEGER
+    },
+    {
+      tableName: "books",
+      timestamps: false
+    }
+  );
 
-  Book.associate = function(models){
-    Book.hasOne(models.Loan, {foreignKey: 'book_id'});
-//changed hasMany to has One
+  Book.associate = function(models) {
+    Book.hasOne(models.Loan, { foreignKey: "book_id" });
+ 
   };
   return Book;
-}
+};
