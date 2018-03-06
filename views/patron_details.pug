@@ -49,4 +49,5 @@ block content
                 td #{returnDate}
                 td #{loan.returned_on}
                 td
+                  if(!loan.returned_on)
                     a.button(href=`/books/return/${loan.Book.id}`) Return Book

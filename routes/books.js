@@ -201,8 +201,44 @@ router.post("/return/:id", function(req, res, next) {
     .then(function() {
       return res.redirect("/loans");
     })
+
     .catch(function(error) {
-      res.send('500');
+      if(error.name === 'SequelizeValidationError'){
+
+
+
+        Loan.findAll({
+          where: [
+            {
+              book_id: req.params.id
+            }
+          ],
+          include: [{ model: Patron }, { model: Book }]
+        })
+          .then(function(loans) {
+            if (loans) {
+              res.render("book_return", {
+                errors: error.errors,
+                loan: loans[0],
+                patron: loans[1],
+                book: loans[2],
+                todaysDate
+              });
+            } else {
+              res.send(404);
+            }
+          })
+
+
+
+
+
+
+
+
+      }else {
+          res.send(500, error);
+        }
     });
 });
 
