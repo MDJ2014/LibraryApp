@@ -103,18 +103,48 @@ router.get("/new", function(req, res, next) {
 
 /******************Post the new Loan. Save to db*********************************POST NEW LOAN */
 
+
 router.post("/new", function(req, res, next) {
+
   Loan.create(req.body)
-    .then(function(loan) {
-      res.redirect("/loans");
-    })
-    .catch(function(error) {
-      res.render("new_loan", {
-        errors: error.errors,
-        todaysDate,
-        returnDate: req.body.return_by
-      });
+     .then(function(loan) {
+       res.redirect("/loans");
+     }).catch(function(error){
+  
+    if(error.name === 'SequelizeValidationError'){
+  
+    const allBooks = Book.findAll({
+      order: [["title", "ASC"]]
     });
-});
+  
+    const allPatrons = Patron.findAll({
+      order: [["first_name", "ASC"], ["last_name", "ASC"]]
+    });
+  
+    Promise.all([allBooks, allPatrons])
+      .then(function(values) {
+        res.render("new_loan", {
+          errors: error.errors,
+          books: values[0],
+          patrons: values[1],
+          todaysDate,
+          returnDate
+        });
+      })
+  
+    }else {
+          res.send(500, error);
+        }
+  
+     });//end catch
+  
+  }); //end
+  
+
+
+
+
+
+
 
 module.exports = router;
